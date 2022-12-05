@@ -1,0 +1,37 @@
+[{
+  "_id": {
+    "$oid": "638cde21a7e03cb8adaada2b"
+  },
+  "nama": "Madara Uchiha",
+  "email": "madarauchiha@konoha.com"
+},{
+  "_id": {
+    "$oid": "638cdf2ca7e03cb8adaada2c"
+  },
+  "nama": "Hashirama Senju",
+  "email": "hashiramahokage@konoha.com"
+},{
+  "_id": {
+    "$oid": "638cdf2ca7e03cb8adaada2d"
+  },
+  "nama": "Naruto Uzumaki",
+  "email": "narutouzumaki@konoha.com"
+},{
+  "_id": {
+    "$oid": "638cdf2ca7e03cb8adaada2e"
+  },
+  "nama": "Minato Namikaze",
+  "email": "yondaime@konoha.com"
+},{
+  "_id": {
+    "$oid": "638cdf2ca7e03cb8adaada2f"
+  },
+  "nama": "Jiraya",
+  "email": "jirayasanin@konoha.com"
+},{
+  "_id": {
+    "$oid": "638cdfe8809ab9d5cb7487f8"
+  },
+  "nama": "Sasuke Uchiha",
+  "email": "sasukeuchiha@konoha.com"
+}]
