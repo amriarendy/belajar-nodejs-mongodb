@@ -13,6 +13,7 @@ express-session@1.17.1
 cookie-parser@1.4.5
 connect-flash@0.1.1
 mongoose@5.12.13
+method-override@3.0.0
 
 *how to running
 how to start?
@@ -54,3 +55,6 @@ app.use(express.urlencoded({ extended: true }));
 
 mongoose
 Object modeling untuk mongodb. sebagai schema model untuk nodejs, ada casting, validation, query building dan logic hooks.
+
+method-override
+Untuk mengganti verb dari https (yang biasanya: get, post).

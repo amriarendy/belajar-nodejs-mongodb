@@ -13,9 +13,13 @@
                             <h5 class="card-title"><%= contact.nama %></h5>
                             <h6 class="card-subtitle mb-2 text-muted"><%= contact.email %></h6>
                             <p class="card-text"><%= contact.nohp %></p>
-                            <a class="btn btn-danger d-block m-2" href="/contact/delete/<%= contact.nama %>" onclick="return confirm('Yakin Dihapus?');">Hapus</a>
                             <a class="btn btn-warning d-block m-2" href="/contact/edit/<%= contact.nama %>">Edit</a>
                             <a class="btn btn-primary d-block m-2" href="/contact">Kembali</a>
+                            <!-- <a class="btn btn-danger d-block m-2" href="/contact/delete/<%= contact.nama %>" onclick="return confirm('Yakin Dihapus?');">Hapus</a> -->
+                            <form action="/contact?_method=DELETE" method="post">
+                                <input type="hidden" name="nama" value="<%= contact.nama %>"/>
+                                <button class="btn btn-danger m-2" type="submit" onclick="return confirm('Yakin Dihapus?');">Hapus</button>
+                            </form>
                         </div>
                     </div>
                 <% } %>
