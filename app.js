@@ -1,143 +1,97 @@
-const { MongoClient, ObjectID } = require('mongodb');
+const express = require('express');
+const expressLayouts = require('express-ejs-layouts');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
+const flash = require('connect-flash');
+require('./utils/db');
+const Contact = require('./model/contact');
 
-const uri = 'mongodb://127.0.0.1:27017';
-const dbName = 'percobaan';
+const app = express();
+const port = 3000;
 
-const client = new MongoClient(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-});
+// setting up view menggunakan ejs
+app.set('view engine', 'ejs');
+app.use(expressLayouts); // menggunakan express-ejs-layouts dan masukan attribute layout: 'dir/file'
+app.use(express.static('public')); // Built-in middleware
+app.use(express.urlencoded({ extended: true }));
 
-client.connect((error, client) => {
-    if (error) {
-        return console.log('Koneksi Gagal!');
-    }
-    console.log('Koneksi Berhasil!!');
-
-    // pilih database
-    const db = client.db(dbName);
-
-    // Menambahkan 1 data ke collection mahasiswa
-    // db.collection('mahasiswa').insertOne(
-    //     {
-    //         nama: 'Mugiwara no Luffy',
-    //         email: 'luffy@onepiece.com',
-    //     },
-    //     (error, result) => {
-    //         if(error) {
-    //             return console.log('gagal menambahkan data');
-    //         }
-    //         console.log(result);
-    //     }
-    // )
-
-    // Menambahkan lebih dari 1 data
-    // db.collection('mahasiswa').insertMany(
-    //     [
-    //         {
-    //             nama: 'Mugiwara no Luffy',
-    //             email: 'luffy@onepiece.com',
-    //         },{
-    //             nama: 'Akagami Shanks',
-    //             email: 'shanks@onepiece.com',
-    //         },{
-    //             nama: 'Gol D Roger',
-    //             email: 'kingroger@onepiece.com',
-    //         },{
-    //             nama: 'Silvers Rayleigh',
-    //             email: 'rayleigh@onepiece.com',
-    //         },{
-    //             nama: 'Jono Joseph',
-    //             email: 'jon@dummy.com',
-    //         },{
-    //             nama: 'no_find_look_upp',
-    //             email: 'nuaro@dummy.com',
-    //         },
-    //     ],
-    //     (error, result) => {
-    //         if(error) {
-    //             return console.log('gagal menambahkan data');
-    //         }
-    //         console.log(result);
-    //     }
-    // )
-
-    // Menampilkan semua data yang ada
-    // db.collection('mahasiswa').find().toArray((error, result) => {
-    //     if (error) {
-    //         console.log('data gagal ditampilkan');
-    //     }
-    //     console.log(result);
-    // });
-    
-    // Menampilkan data berdasarkan kriteria id (untuk menampilkan id require ObjectID dahulu)
-    // db.collection('mahasiswa').find({ _id: ObjectID('638e15025cd5575944c8476c') }).toArray((error, result) => {
-    //     if (error) {
-    //         console.log('data gagal ditampilkan');
-    //     }
-    //     console.log(result);
-    // });
-
-    // // Menampilkan data berdasarkan kriteria
-    //     console.log(db.collection('mahasiswa').find({ nama: 'Akagami Shanks' }).toArray((error, result) => {
-    //         console.log(result);
-    //     })
-    // );
-
-    // Mengubah data berdasarkan kriteria id
-    // const updatePromise = db.collection('mahasiswa').updateOne(
-    //     {
-    //         _id: ObjectID('638e15025cd5575944c84771'),
-    //     },{
-    //         $set: {
-    //             nama: 'Edwar Newgate',
-    //             email: 'shirohige@onepiece.com',
-    //         },
-    //     }
-    // );
-    // updatePromise.then((result) => { 
-    //     console.log(result)
-    // }).catch((error) => {
-    //     console.log(error)
-    // })
-
-    // Mengubah data berdasarkan lebih dari satu
-    // const updatePromise = db.collection('mahasiswa').updateMany(
-    //     {
-    //         _id: ObjectID('638e15025cd5575944c84771'),
-    //     },{
-    //         $set: {
-    //             nama: 'Edwar Newgate',
-    //             email: 'shirohige@onepiece.com',
-    //         },
-    //     },
-    // );
-    // updatePromise.then((result) => { 
-    //     console.log(result)
-    // }).catch((error) => {
-    //     console.log(error)
-    // })
-
-    // Menghapus 1 data
-    // db.collection('mahasiswa').deleteOne(
-    //     {
-    //         _id: ObjectID("638e15025cd5575944c84770"),
-    //     }
-    // ).then((result) => {
-    //     console.log(result);
-    // }).catch((error) => {
-    //     console.log(error);
-    // })
-
-    // Menghapus lebih dari 1 data
-    db.collection('mahasiswa').deleteMany(
-        {
-            _id: ObjectID("638e1341677a5a4b8cef5290"),
-        }
-    ).then((result) => {
-        console.log(result);
-    }).catch((error) => {
-        console.log(error);
+// Setting up flash
+app.use(cookieParser());
+app.use(session({
+        cookie: { maxAge: 6000 },
+        secret: 'secret',
+        resave: true,
+        saveUninitialized: true,
     })
+);
+app.use(flash());
+
+// menampilan pesan ke terminal sedang running
+app.listen(port, () => {
+    console.log(`Nodejs With Mongodb | app listening at http://localhost:${port}`);
 });
 
+// Page Home
+app.get('/', (req, res) => {
+    const mahasiswa = [
+        {
+            nama: 'Amria Rendy',
+            email: 'madarauchiha@ejs.co',
+        },
+        {
+            nama: 'John',
+            email: 'joni@ejs.co',
+        },
+        {
+            nama: 'Tomcat',
+            email: 'tomcat@ejs.co',
+        }
+    ]
+    res.render('index', { 
+        layout: 'layouts/main',
+        name: 'amriarendy', 
+        title: 'Halaman Home', 
+        mahasiswa});
+});
+
+// Page About
+app.get('/about', (req, res) => {
+    res.render('about', { 
+        layout: 'layouts/main',
+        title: 'Halaman About',
+    });
+});
+
+// Page Contact
+app.get('/contact', async (req, res) => {
+    // Jika mau menjalankan tanpa async dan await
+    // Contact.find().then((contact) => {
+    //     res.send(contact);
+    // });
+
+    const contacts = await Contact.find();
+    res.render('contact', {
+        layout: 'layouts/main',
+        title: 'Halaman Contact',
+        contacts,
+        msg: req.flash('msg'),
+    });
+});
+
+// Page detail
+app.get('/contact/:nama', async (req, res) => {
+    const contact = await Contact.findOne({ nama: req.params.nama });
+    res.render('detail', {
+        layout: 'layouts/main',
+        title: 'Halaman Detail Contact',
+        contact,
+    });
+});
+
+// Page Not Found 404
+app.use('/', (req, res) => {
+    res.render('404', {
+        layout: 'layouts/main',
+        title: '404 Page Not Found'
+    });
+});
